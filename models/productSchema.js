@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const productSchema = mongoose.Schema(
   {
     productName: String,
-    manufacturerName: String,
+    by: String,
     price: String,
     regularPrice: String,
     quantity: String,
@@ -43,9 +43,15 @@ const productSchema = mongoose.Schema(
       enum: ["N/A", "Yes"],
       default: "N/A",
     },
+    productBadges: {
+      type: String,
+    },
   },
   {
     timestamps: true,
+  },
+  {
+    lastUpdated: true,
   }
 );
 

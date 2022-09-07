@@ -137,4 +137,14 @@ const getToken = async (req, res) => {
   }
 };
 
-module.exports = { loginController, logout, getToken, isValidToken };
+// is Admin
+const isAdmin = async (req, res) => {
+  if (req.user.role) {
+    const isAdmin = req.user.role === "admin" || "moderator";
+    res.send({ admin: isAdmin });
+  } else {
+    res.send({ admin: false });
+  }
+};
+
+module.exports = { loginController, logout, getToken, isValidToken, isAdmin };

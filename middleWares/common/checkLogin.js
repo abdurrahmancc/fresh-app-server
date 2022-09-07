@@ -38,8 +38,6 @@ const existCookie = (req, res, next) => {
 // guard to protect routes that need role-based authorization
 const requireRole = (role) => {
   return function (req, res, next) {
-    console.log(role);
-    console.log(req.user.role);
     if (req.user.role && role.includes(req.user.role)) {
       next();
     } else {

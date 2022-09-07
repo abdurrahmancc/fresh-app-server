@@ -10,7 +10,9 @@ const {
   getToken,
   googleLoginController,
   isValidToken,
+  isAdmin,
 } = require("../../Controller/loginController");
+const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 
 const {
   doLoginValidators,
@@ -19,6 +21,9 @@ const {
 
 // verify Token
 router.get("/isValidToken", isValidToken);
+
+// check admin
+router.get("/admin/:email", verifyJWT, isAdmin);
 
 // get token
 router.get("/:email", getToken);
