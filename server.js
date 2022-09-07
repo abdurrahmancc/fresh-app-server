@@ -1,17 +1,31 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const cookieParser = require("cookie-parser");
 const { notFoundHandler, errorHandler } = require("./middleWares/common/errorHandler");
 const port = process.env.PORT || 5000;
 
+// routers
+const usersRouter = require("./routers/v1/usersRouter");
+const loginRouter = require("./routers/v1/loginRouter");
+const productRouter = require("./routers/v1/productRouter");
+
+// express app initialization
 const app = express();
 dotenv.config();
+app.use(
+  cors({
+    crossDomain: true,
+    credentials: true,
+    exposedHeaders: ["Set-Cookie", "Date", "ETag"],
+    origin: ["http://localhost:3000"],
+  })
+);
 
 // database connection
-
-const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@cluster0.6gfhdhg.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@cluster0.6gfhdhg.mongodb.net/${process.env.APP_NAME}?retryWrites=true&w=majority`;
 
 mongoose
   .connect(uri, {
@@ -31,7 +45,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // router setup
-// app.use("/");
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/login", loginRouter);
+app.use("/api/v1/product", productRouter);
 
 // 404 not found handler
 app.use(notFoundHandler);

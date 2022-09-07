@@ -8,9 +8,21 @@ function notFoundHandler(req, res, next) {
 // default error handler
 function errorHandler(err, req, res, next) {
   if (err) {
-    res.status(500).send(err.message);
+    res.status(500).send({
+      errors: {
+        common: {
+          msg: err.message,
+        },
+      },
+    });
   } else {
-    res.status(500).send("there was an error");
+    res.status(500).send({
+      errors: {
+        common: {
+          msg: "there was an error",
+        },
+      },
+    });
   }
 }
 
