@@ -5,6 +5,7 @@ const {
   allProducts,
   getProductsLength,
   getCartProducts,
+  getProductDetails,
 } = require("../../Controller/productController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 const Product = require("../../models/productSchema");
@@ -12,6 +13,9 @@ const router = express.Router();
 
 // get all products length
 router.get("/counter", getProductsLength);
+
+// get product details
+router.get("/product-details/:id", getProductDetails);
 
 //  get all product
 router.post("/all-products", allProducts);

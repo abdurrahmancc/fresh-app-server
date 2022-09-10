@@ -20,7 +20,7 @@ const {
 } = require("../../middleWares/login/loginValidators");
 
 // verify Token
-router.get("/isValidToken", isValidToken);
+router.get("/isValidToken", verifyJWT, isValidToken);
 
 // check admin
 router.get("/admin/:email", verifyJWT, isAdmin);

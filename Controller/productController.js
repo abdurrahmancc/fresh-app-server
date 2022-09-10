@@ -1,4 +1,5 @@
 const createError = require("http-errors");
+const mongoose = require("mongoose");
 const Product = require("../models/productSchema");
 
 // add product
@@ -64,4 +65,14 @@ const getCartProducts = async (req, res, next) => {
   }
 };
 
-module.exports = { addProduct, allProducts, getProductsLength, getCartProducts };
+const getProductDetails = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const product = await Product.findOne({ _id: id });
+    res.send(product);
+  } catch (error) {
+    next(createError());
+  }
+};
+
+module.exports = { addProduct, allProducts, getProductsLength, getCartProducts, getProductDetails };
