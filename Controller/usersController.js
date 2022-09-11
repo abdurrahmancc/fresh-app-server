@@ -150,10 +150,117 @@ const removeUser = async (req, res, next) => {
   }
 };
 
+/* ---------- my profile detail ------------ */
+const myProfileDetails = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const filter = { email: email };
+    const result = await User.findOne(filter).select({ password: 0, _id: 0 });
+    res.send(result);
+  } catch (error) {
+    next(createError(500, "There was a server error!"));
+  }
+};
+
+/* ---------- handel Update Image ------------ */
+const updateImage = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const photoURL = req.body;
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: photoURL,
+    };
+    await User.findOneAndUpdate(filter, updateDoc, options);
+    res.send({ update: true });
+  } catch (error) {
+    next(createError(500, "There was a server error!"));
+  }
+};
+
+/* ---------- handel Update user number ------------ */
+const updateNumber = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const phoneNumber = req.body.phoneNumber;
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: { phoneNumber: phoneNumber },
+    };
+    await User.findOneAndUpdate(filter, updateDoc, options);
+    res.send({ update: true });
+  } catch (error) {
+    next(createError(500, "There was a server error!"));
+  }
+};
+
+/* ---------- handel Update user name ------------ */
+const updateUserName = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const displayName = req.body;
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: displayName,
+    };
+    await User.findOneAndUpdate(filter, updateDoc, options);
+    res.send({ update: true });
+  } catch (error) {
+    next(createError(500, "There was a server error!"));
+  }
+};
+
+/* ---------- update Present Address ------------ */
+const updatePresentAddress = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const info = req.body.info;
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: {
+        presentAddress: info,
+      },
+    };
+    await User.findOneAndUpdate(filter, updateDoc, options);
+    res.send({ result: true });
+  } catch (error) {
+    next(createError(500, "There was a server error!"));
+  }
+};
+
+/* ---------- update permanent Address ------------ */
+const updatePermanentAddress = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const info = req.body.info;
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: {
+        permanentAddress: info,
+      },
+    };
+    await User.findOneAndUpdate(filter, updateDoc, options);
+    res.send({ result: true });
+  } catch (error) {
+    next(createError(500, "There was a server error!"));
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
   removeUser,
   getAllAdmins,
   makeRole,
+  myProfileDetails,
+  updateImage,
+  updateNumber,
+  updateUserName,
+  updatePresentAddress,
+  updatePermanentAddress,
 };

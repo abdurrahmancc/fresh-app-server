@@ -1,8 +1,7 @@
 const createError = require("http-errors");
-const mongoose = require("mongoose");
 const Product = require("../models/productSchema");
 
-// add product
+/*----------- add product -------------*/
 const addProduct = async (req, res, next) => {
   if (req.user.role !== "admin") {
     return next(createError(403, "Forbidden access!"));
@@ -22,7 +21,7 @@ const addProduct = async (req, res, next) => {
   }
 };
 
-// get all products
+/*------------ get all products -------------*/
 const allProducts = async (req, res, next) => {
   const category = req.body;
   const page = parseInt(req.query.page);
@@ -39,21 +38,21 @@ const allProducts = async (req, res, next) => {
       .limit(count);
     res.send(products);
   } catch (error) {
-    next(createHttpError(500, "there was an server error"));
+    next(createError(500, "there was an server error"));
   }
 };
 
-// get all products length
+/*----------- get all products length ---------*/
 const getProductsLength = async (req, res, next) => {
   try {
     const count = await Product.estimatedDocumentCount();
     res.send({ count });
   } catch (error) {
-    next(createHttpError(500, "there was an server error"));
+    next(createError(500, "there was an server error"));
   }
 };
 
-// get cart-products
+/*---------- get cart products ---------*/
 const getCartProducts = async (req, res, next) => {
   const keys = req.body;
   try {
@@ -61,10 +60,34 @@ const getCartProducts = async (req, res, next) => {
     const result = await Product.find(query);
     res.send(result);
   } catch (error) {
-    next(createHttpError(500, "there was an server error"));
+    next(createError(500, "there was an server error"));
   }
 };
 
+/*-------- get wishlist-products ---------- */
+const getWishlistProducts = async (req, res, next) => {
+  const keys = req.body;
+  try {
+    let query = { _id: { $in: keys } };
+    const result = await Product.find(query);
+    res.send(result);
+  } catch (error) {
+    next(createError(500, "there was an server error"));
+  }
+};
+/*--------- get compare List products ----------*/
+const getCompareListProducts = async (req, res, next) => {
+  const keys = req.body;
+  try {
+    let query = { _id: { $in: keys } };
+    const result = await Product.find(query);
+    res.send(result);
+  } catch (error) {
+    next(createError(500, "there was an server error"));
+  }
+};
+
+/* --------- getProductDetails ----------- */
 const getProductDetails = async (req, res, next) => {
   const id = req.params.id;
   try {
@@ -75,4 +98,12 @@ const getProductDetails = async (req, res, next) => {
   }
 };
 
-module.exports = { addProduct, allProducts, getProductsLength, getCartProducts, getProductDetails };
+module.exports = {
+  addProduct,
+  allProducts,
+  getProductsLength,
+  getCartProducts,
+  getProductDetails,
+  getWishlistProducts,
+  getCompareListProducts,
+};

@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema(
     },
     phoneNumber: {
       type: String,
+      unique: true,
     },
     password: {
       type: String,
@@ -22,12 +23,15 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
+      default: "",
     },
     photoURL: {
       type: String,
+      default: "",
     },
     firebaseUid: {
       type: String,
+      default: "",
     },
     role: {
       type: String,
@@ -46,6 +50,24 @@ const userSchema = mongoose.Schema(
     loginDevices: {
       type: Array,
       default: [],
+    },
+    presentAddress: {
+      country: String,
+      district: String,
+      streetAddress: String,
+      zipCode: String,
+    },
+    presentAddress: {
+      country: String,
+      district: String,
+      streetAddress: String,
+      zipCode: String,
+    },
+    permanentAddress: {
+      country: String,
+      district: String,
+      streetAddress: String,
+      zipCode: String,
     },
     status: {
       type: String,
