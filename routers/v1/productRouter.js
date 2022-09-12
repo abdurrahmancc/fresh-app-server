@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   addProduct,
   allProducts,
@@ -9,7 +10,6 @@ const {
   getCompareListProducts,
 } = require("../../Controller/productController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
-const router = express.Router();
 
 /*------------- get all products length -----------*/
 router.get("/counter", getProductsLength);

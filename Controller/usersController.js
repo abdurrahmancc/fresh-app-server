@@ -4,7 +4,6 @@ const { unlink } = require("fs");
 const path = require("path");
 const parser = require("ua-parser-js");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const createError = require("http-errors");
 
 // internal imports
@@ -75,7 +74,7 @@ const addUser = async (req, res, next) => {
       signed: true,
     });
 
-    await newUser.save((err) => {
+    newUser.save((err) => {
       if (err) {
         res.status(500).send({
           errors: {

@@ -7,12 +7,14 @@ const cookieParser = require("cookie-parser");
 const { notFoundHandler, errorHandler } = require("./middleWares/common/errorHandler");
 const port = process.env.PORT || 5000;
 
-// routers
+/*-------------- routers ------------*/
 const usersRouter = require("./routers/v1/usersRouter");
 const loginRouter = require("./routers/v1/loginRouter");
 const productRouter = require("./routers/v1/productRouter");
+const orderRouter = require("./routers/v1/orderRouter");
+const paymentRouter = require("./routers/v1/paymentRouter");
 
-// express app initialization
+/*---------- express app initialization -----------*/
 const app = express();
 dotenv.config();
 app.use(
@@ -28,7 +30,7 @@ app.use(
   })
 );
 
-// database connection
+/*------------ database connection --------------*/
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@cluster0.6gfhdhg.mongodb.net/${process.env.APP_NAME}?retryWrites=true&w=majority`;
 
 mongoose
@@ -41,24 +43,27 @@ mongoose
   .then(() => console.log("database connection successfully"))
   .catch((error) => console.log(error));
 
-//   request parser
+/*------------- request parser -------------*/
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// parser cookies
+/*---------- parser cookies --------------*/
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-// router setup
+/*--------- router setup --------------*/
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/order", orderRouter);
+app.use("/api/v1/payment", paymentRouter);
 
-// 404 not found handler
+/*----------- 404 not found handler ----------*/
 app.use(notFoundHandler);
 
-// common error handler
+/*--------- common error handler ----------*/
 app.use(errorHandler);
 
+/*---------- listen port ------------*/
 app.listen(port, () => {
   console.log(`app listen port ${port}`);
 });
