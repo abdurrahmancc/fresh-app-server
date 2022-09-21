@@ -9,11 +9,11 @@ const productSchema = mongoose.Schema(
     quantity: String,
     productCode: String,
     SKU: String,
-    category: String,
     brand: String,
     productDescription: String,
     reviewQuantity: String,
     rating: String,
+    category: Array,
     colors: Array,
     weight: Array,
     productImages: Array,
@@ -37,6 +37,7 @@ const productSchema = mongoose.Schema(
     stockStatus: {
       type: String,
       enum: ["in stock", "out of stock"],
+      default: "in stock",
     },
     dimensions: {
       type: String,

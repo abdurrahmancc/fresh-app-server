@@ -8,7 +8,7 @@ const addProduct = async (req, res, next) => {
   }
   try {
     const product = new Product(req.body);
-    const result = await product.save();
+    await product.save();
     res.status(200).send({ message: "product was inserted successfully!" });
   } catch (error) {
     res.status(500).send({
@@ -98,6 +98,18 @@ const getProductDetails = async (req, res, next) => {
   }
 };
 
+/*---------------- get Home Products ----------------*/
+const getHomeProducts = async (req, res, next) => {
+  try {
+    const category = req.params.category;
+    const query = { category: category };
+    const result = await Product.find(query);
+    res.status(200).send({ message: "success", result });
+  } catch (error) {
+    next(createError());
+  }
+};
+
 module.exports = {
   addProduct,
   allProducts,
@@ -106,4 +118,5 @@ module.exports = {
   getProductDetails,
   getWishlistProducts,
   getCompareListProducts,
+  getHomeProducts,
 };

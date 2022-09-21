@@ -8,7 +8,6 @@ const {
   loginController,
   logout,
   getToken,
-  googleLoginController,
   isValidToken,
   isAdmin,
 } = require("../../Controller/loginController");
