@@ -9,6 +9,7 @@ const {
   getWishlistProducts,
   getCompareListProducts,
   getHomeProducts,
+  searchProduct,
 } = require("../../Controller/productController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 
@@ -35,5 +36,8 @@ router.get("/home/products/:category", getHomeProducts);
 
 /*---------- add product -----------*/
 router.post("/add-product", verifyJWT, requireRole(["admin", "moderator"]), addProduct);
+
+/*---------- search products -----------*/
+router.post("/search", searchProduct);
 
 module.exports = router;

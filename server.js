@@ -13,6 +13,7 @@ const loginRouter = require("./routers/v1/loginRouter");
 const productRouter = require("./routers/v1/productRouter");
 const orderRouter = require("./routers/v1/orderRouter");
 const paymentRouter = require("./routers/v1/paymentRouter");
+const blogRouter = require("./routers/v1/blogsRouter");
 
 /*---------- express app initialization -----------*/
 const app = express();
@@ -56,6 +57,7 @@ app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/blog", blogRouter);
 
 /*----------- 404 not found handler ----------*/
 app.use(notFoundHandler);

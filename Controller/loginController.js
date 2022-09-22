@@ -43,7 +43,7 @@ const loginController = async (req, res, next) => {
               IPAddress: addNewIpAddress,
             },
           };
-          const result = await User.findOneAndUpdate(filter, updateDoc, options);
+          await User.findOneAndUpdate(filter, updateDoc, options);
         }
 
         // Update Devices when login with different devices
@@ -56,7 +56,7 @@ const loginController = async (req, res, next) => {
             },
           };
           //update
-          const result = await User.findOneAndUpdate(filter, updateDoc, options);
+          await User.findOneAndUpdate(filter, updateDoc, options);
         }
 
         //set cookie

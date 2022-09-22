@@ -110,6 +110,35 @@ const getHomeProducts = async (req, res, next) => {
   }
 };
 
+/*------------ search product ------------------*/
+const searchProduct = async (req, res, next) => {
+  try {
+    const { inputData, category } = req.body;
+    if (category) {
+      const result = await Product.find({
+        category: category,
+        productName: { $regex: inputData, $options: "i" },
+      });
+      if (result.length >= 1) {
+        res.status(200).send({ result, message: "success" });
+      } else {
+        res.status(204).send({ message: "There are no results" });
+      }
+    } else {
+      const result = await Product.find({
+        productName: { $regex: inputData, $options: "i" },
+      });
+      if (result.length >= 1) {
+        res.status(200).send({ result, message: "success" });
+      } else {
+        res.status(204).send({ message: "There are no results" });
+      }
+    }
+  } catch (error) {
+    next(createError(500, "There was an server error"));
+  }
+};
+
 module.exports = {
   addProduct,
   allProducts,
@@ -119,4 +148,5 @@ module.exports = {
   getWishlistProducts,
   getCompareListProducts,
   getHomeProducts,
+  searchProduct,
 };
