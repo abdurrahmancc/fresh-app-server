@@ -136,6 +136,7 @@ const removeUser = async (req, res, next) => {
     }
 
     res.status(200).send({
+      data: user,
       message: "User was removed successfully!",
     });
   } catch (err) {

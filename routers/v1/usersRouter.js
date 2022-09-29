@@ -70,6 +70,6 @@ router.post("/makeRole/:id", verifyJWT, requireRole(["admin"]), makeRole);
 router.post("/", addUserValidators, addUserValidationHandler, addUser);
 
 // remove user
-router.delete("/:id", removeUser);
+router.delete("/:id", verifyJWT, requireRole(["admin"]), removeUser);
 
 module.exports = router;

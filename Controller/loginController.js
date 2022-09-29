@@ -8,6 +8,7 @@ const parser = require("ua-parser-js");
 const User = require("../models/newUser");
 
 const loginController = async (req, res, next) => {
+  console.log("datadfasfaf", req.body);
   try {
     const loginDevices = parser(req.headers["user-agent"]);
     const user = await User.findOne({
@@ -141,7 +142,7 @@ const getToken = async (req, res) => {
 // is Admin
 const isAdmin = async (req, res) => {
   if (req.user.role) {
-    const isAdmin = req.user.role === "admin" || "moderator";
+    const isAdmin = req.user.role === ("admin" || "moderator");
     res.send({ admin: isAdmin });
   } else {
     res.send({ admin: false });

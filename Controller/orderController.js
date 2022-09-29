@@ -28,7 +28,7 @@ const getUserOrders = async (req, res, next) => {
   try {
     const email = req.params.email;
     const query = { userEmail: email };
-    const result = await Order.find({ query });
+    const result = await Order.find(query);
     res.send(result);
   } catch (error) {
     next(createError(500, "There was an server error"));

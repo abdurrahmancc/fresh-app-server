@@ -1,6 +1,5 @@
 // external imports
 const express = require("express");
-const { verify } = require("jsonwebtoken");
 const router = express.Router();
 
 // internal imports
@@ -21,16 +20,16 @@ const {
 // verify Token
 router.get("/isValidToken", verifyJWT, isValidToken);
 
-// check admin
-router.get("/admin/:email", verifyJWT, isAdmin);
-
-// get token
-router.get("/:email", getToken);
-
 // login pages
 router.post("/", doLoginValidators, doLoginValidationHandler, loginController);
 
 // logout wite remove cookie
 router.delete("/", logout);
+
+// check admin
+router.get("/admin/:email", verifyJWT, isAdmin);
+
+// get token
+router.get("/:email", getToken);
 
 module.exports = router;
