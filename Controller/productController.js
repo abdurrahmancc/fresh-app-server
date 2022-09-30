@@ -26,8 +26,8 @@ const allProducts = async (req, res, next) => {
   const categories = req.body;
   const page = parseInt(req.query.page);
   const count = parseInt(req.query.size);
-  const minPrice = parseInt(req.query.minPrice);
-  const maxPrice = parseInt(req.query.maxPrice);
+  let minPrice = Number(req.query.minPrice);
+  let maxPrice = Number(req.query.maxPrice);
 
   try {
     let query;
@@ -35,6 +35,11 @@ const allProducts = async (req, res, next) => {
       query = { category: { $in: categories } };
     } else {
       query = {};
+    }
+
+    if (minPrice == 50 && maxPrice == 150) {
+      minPrice = 1;
+      maxPrice = 200;
     }
     const products = await Product.find({
       $and: [query, { price: { $gte: minPrice, $lte: maxPrice } }],
