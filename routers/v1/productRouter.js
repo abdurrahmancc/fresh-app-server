@@ -16,9 +16,6 @@ const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin"
 /*------------- get all products length -----------*/
 router.get("/counter", getProductsLength);
 
-/*---------- get product details ------------*/
-router.get("/product-details/:id", getProductDetails);
-
 /*----------- get all product -----------*/
 router.post("/all-products", allProducts);
 
@@ -39,5 +36,8 @@ router.post("/add-product", verifyJWT, requireRole(["admin", "moderator"]), addP
 
 /*---------- search products -----------*/
 router.post("/search", searchProduct);
+
+/*---------- get product details ------------*/
+router.get("/product-details/:id", getProductDetails);
 
 module.exports = router;

@@ -23,21 +23,27 @@ const addProduct = async (req, res, next) => {
 
 /*------------ get all products -------------*/
 const allProducts = async (req, res, next) => {
-  const category = req.body;
+  const categories = req.body;
   const page = parseInt(req.query.page);
   const count = parseInt(req.query.size);
+  const minPrice = parseInt(req.query.minPrice);
+  const maxPrice = parseInt(req.query.maxPrice);
+
   try {
     let query;
-    if (category.length) {
-      query = { category: { $in: category } };
+    if (categories.length) {
+      query = { category: { $in: categories } };
     } else {
       query = {};
     }
-    const products = await Product.find(query)
+    const products = await Product.find({
+      $and: [query, { price: { $gte: minPrice, $lte: maxPrice } }],
+    })
       .skip(page * count)
       .limit(count);
     res.send(products);
   } catch (error) {
+    console.log(error);
     next(createError(500, "there was an server error"));
   }
 };
