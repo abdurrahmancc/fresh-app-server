@@ -13,7 +13,6 @@ const User = require("../models/newUser");
 const getUsers = async (req, res, next) => {
   const email = req.params.email;
   const user = await User.findOne({ email: email });
-  // console.log(user);
   try {
     const users = await User.find();
     res.send({ users: users });

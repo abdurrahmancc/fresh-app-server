@@ -7,6 +7,7 @@ const addProduct = async (req, res, next) => {
     return next(createError(403, "Forbidden access!"));
   }
   try {
+    // console.log(req.body);
     const product = new Product(req.body);
     await product.save();
     res.status(200).send({ message: "product was inserted successfully!" });
@@ -14,7 +15,7 @@ const addProduct = async (req, res, next) => {
     res.status(500).send({
       errors: {
         common: {
-          msg: "There was a server error!",
+          msg: error.message,
         },
       },
     });
@@ -48,7 +49,6 @@ const allProducts = async (req, res, next) => {
       .limit(count);
     res.send(products);
   } catch (error) {
-    console.log(error);
     next(createError(500, "there was an server error"));
   }
 };
@@ -110,14 +110,26 @@ const getProductDetails = async (req, res, next) => {
 };
 
 /*---------------- get Home Products ----------------*/
-const getHomeProducts = async (req, res, next) => {
+const getProducts = async (req, res, next) => {
+  /* http://localhost:5000/api/v1/product/home/products/:category?limit=3&*/
   try {
-    const category = req.params.category;
-    const query = { category: category };
-    const result = await Product.find(query);
-    res.status(200).send({ message: "success", result });
+    const query = { category: req.params.category };
+    let { limit = 5 } = req.query;
+    limit = Number(limit);
+
+    let products;
+    if (req.params.category === "all") {
+      products = await Product.find({}).limit(limit);
+    } else {
+      products = await Product.find(query).limit(limit);
+    }
+
+    res.status(200).json({
+      status: "success",
+      result: products,
+    });
   } catch (error) {
-    next(createError());
+    next(createError(400, error.message));
   }
 };
 
@@ -130,20 +142,12 @@ const searchProduct = async (req, res, next) => {
         category: category,
         productName: { $regex: inputData, $options: "i" },
       });
-      if (result.length >= 1) {
-        res.status(200).send({ result, message: "success" });
-      } else {
-        res.status(204).send({ message: "There are no results" });
-      }
+      res.status(200).send({ result, message: "success" });
     } else {
       const result = await Product.find({
         productName: { $regex: inputData, $options: "i" },
       });
-      if (result.length >= 1) {
-        res.status(200).send({ result, message: "success" });
-      } else {
-        res.status(204).send({ message: "There are no results" });
-      }
+      res.status(200).send({ result, message: "success" });
     }
   } catch (error) {
     next(createError(500, "There was an server error"));
@@ -153,11 +157,11 @@ const searchProduct = async (req, res, next) => {
 module.exports = {
   addProduct,
   allProducts,
+  getProducts,
   getProductsLength,
   getCartProducts,
   getProductDetails,
   getWishlistProducts,
   getCompareListProducts,
-  getHomeProducts,
   searchProduct,
 };

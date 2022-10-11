@@ -8,7 +8,6 @@ const parser = require("ua-parser-js");
 const User = require("../models/newUser");
 
 const loginController = async (req, res, next) => {
-  console.log("datadfasfaf", req.body);
   try {
     const loginDevices = parser(req.headers["user-agent"]);
     const user = await User.findOne({

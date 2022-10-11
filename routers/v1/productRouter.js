@@ -10,6 +10,7 @@ const {
   getCompareListProducts,
   getHomeProducts,
   searchProduct,
+  getProducts,
 } = require("../../Controller/productController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 
@@ -28,9 +29,6 @@ router.post("/wishlist-products", getWishlistProducts);
 /*---------- get all compare List products ------------*/
 router.post("/compare-List/products", getCompareListProducts);
 
-/*----------------- get home products --------------*/
-router.get("/home/products/:category", getHomeProducts);
-
 /*---------- add product -----------*/
 router.post("/add-product", verifyJWT, requireRole(["admin", "moderator"]), addProduct);
 
@@ -39,5 +37,8 @@ router.post("/search", searchProduct);
 
 /*---------- get product details ------------*/
 router.get("/product-details/:id", getProductDetails);
+
+/*----------------- get home products --------------*/
+router.get("/home/products/:category", getProducts);
 
 module.exports = router;

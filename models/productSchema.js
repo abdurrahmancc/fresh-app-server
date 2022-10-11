@@ -19,7 +19,6 @@ const productSchema = mongoose.Schema(
     },
     regularPrice: {
       type: Number,
-      required: [true, "product regular Price must be required"],
       trim: true,
     },
     quantity: {
@@ -51,31 +50,19 @@ const productSchema = mongoose.Schema(
     },
     reviewQuantity: String,
     rating: String,
-    category: {
-      type: String,
-      required: [true, "product category must be required"],
-      trim: true,
-    },
+    category: [
+      {
+        type: String,
+        required: [true, "product category must be required"],
+        trim: true,
+      },
+    ],
     colors: Array,
     weight: Array,
     productImages: [
       {
         type: String,
-        validate: {
-          validator: (value) => {
-            if (!Array.isArray(value)) {
-              return false;
-            }
-            let isValid = true;
-            value.forEach((url) => {
-              if (!validator.isURL(url)) {
-                isValid = false;
-              }
-            });
-            return isValid;
-          },
-          message: "Please provide a valid image URLs",
-        },
+        required: [true, "product image url must be required"],
       },
     ],
     metaData: {
