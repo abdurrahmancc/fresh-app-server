@@ -47,8 +47,30 @@ const getOrder = async (req, res, next) => {
   }
 };
 
+/* ---------- get orders  --------- */
+const getOrders = async (req, res, next) => {
+  try {
+    const result = await Order.find({});
+    res.status(200).send({ status: "success", orders: result });
+  } catch (error) {
+    next(createError(500, "There was an server error"));
+  }
+};
+
+/* ---------- get paid orders  --------- */
+const getPaidOrders = async (req, res, next) => {
+  try {
+    const result = await Order.find({ paid: true });
+    res.status(200).send({ status: "success", orders: result });
+  } catch (error) {
+    next(createError(500, "There was an server error"));
+  }
+};
+
 module.exports = {
   newAddOrder,
   getUserOrders,
   getOrder,
+  getPaidOrders,
+  getOrders,
 };
