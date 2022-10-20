@@ -9,6 +9,7 @@ const User = require("../models/newUser");
 
 const loginController = async (req, res, next) => {
   try {
+    // console.log(req.body);
     const loginDevices = parser(req.headers["user-agent"]);
     const user = await User.findOne({
       $or: [{ email: req.body.username }, { phoneNumber: req.body.username }],
