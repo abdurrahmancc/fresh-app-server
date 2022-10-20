@@ -27,6 +27,7 @@ app.use(
       "http://localhost:3000",
       "https://fresh-a3f88.web.app",
       "https://fresh-a3f88.firebaseapp.com",
+      "https://sweet-dolphin-f5a740.netlify.app",
     ],
   })
 );
