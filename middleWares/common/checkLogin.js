@@ -3,9 +3,20 @@ const createError = require("http-errors");
 
 const verifyJWT = (req, res, next) => {
   let cookies = Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null;
+
   if (cookies) {
     try {
       const token = cookies[process.env.COOKIE_NAME];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
+      next();
+    } catch (error) {
+      res.clearCookie(process.env.COOKIE_NAME);
+      next(createError(403, "Forbidden access!"));
+    }
+  } else if (req?.headers?.authorization) {
+    try {
+      const token = req?.headers?.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
       next();
