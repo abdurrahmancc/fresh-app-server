@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { logout } = require("../../Controller/loginController");
 const createError = require("http-errors");
 
 const verifyJWT = (req, res, next) => {
@@ -15,10 +14,11 @@ const verifyJWT = (req, res, next) => {
       next(createError(403, "Forbidden access!"));
     }
   } else {
+    res.clearCookie(process.env.COOKIE_NAME);
     return res.status(401).send({
       errors: {
         common: {
-          msg: "UnAuthorized access",
+          msg: "UnAuthorized Access",
         },
       },
     });
