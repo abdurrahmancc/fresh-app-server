@@ -23,7 +23,11 @@ app.use(
     crossDomain: true,
     credentials: true,
     exposedHeaders: ["Set-Cookie", "Date", "ETag"],
-    origin: ["http://localhost:3000", process.env.LIVE_SITE_URL, process.env.LIVE_SITE_URL_2],
+    origin: [
+      "http://localhost:3000",
+      "https://fresh-a3f88.web.app",
+      "https://fresh-a3f88.firebaseapp.com",
+    ],
   })
 );
 
