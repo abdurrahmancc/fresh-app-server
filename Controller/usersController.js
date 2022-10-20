@@ -250,7 +250,7 @@ const updatePermanentAddress = async (req, res, next) => {
   }
 };
 
-// google user
+/*--------------  google user ----------------*/
 const googleUser = async (req, res, next) => {
   try {
     const loginDevices = parser(req.headers["user-agent"]);
@@ -273,7 +273,6 @@ const googleUser = async (req, res, next) => {
       //  Update IP address when login with different devices
       const options = { upsert: true };
       const filter = { email: user.email };
-
       const existIp = user.IPAddress.find((ip) => ip === req.ip);
       if (!existIp) {
         const addNewIpAddress = [...user.IPAddress, req.ip];
