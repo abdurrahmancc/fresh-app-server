@@ -12,7 +12,7 @@ const verifyJWT = (req, res, next) => {
       next();
     } catch (error) {
       res.clearCookie(process.env.COOKIE_NAME);
-      next(createError(403, "Forbidden access!"));
+      next(createError(403, "Forbidden Access!"));
     }
   } else if (req?.headers?.authorization) {
     try {

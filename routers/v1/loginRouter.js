@@ -9,6 +9,7 @@ const {
   getToken,
   isValidToken,
   isAdmin,
+  googleUser,
 } = require("../../Controller/loginController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 
@@ -22,6 +23,9 @@ router.get("/isValidToken", verifyJWT, isValidToken);
 
 // login pages
 router.post("/", doLoginValidators, doLoginValidationHandler, loginController);
+
+/*---------- google user------------*/
+router.put("/google", googleUser);
 
 // logout wite remove cookie
 router.delete("/", logout);

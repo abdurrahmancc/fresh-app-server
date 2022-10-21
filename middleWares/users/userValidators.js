@@ -5,52 +5,7 @@ const path = require("path");
 const { unlink } = require("fs");
 
 // internal imports
-const User = require("../../models/newUser");
-
-// add user
-const addUserValidators = [
-  check("displayName")
-    .isLength({ min: 1 })
-    .withMessage("Name is required")
-    .isAlpha("en-US", { ignore: " -" })
-    .withMessage("Name must not contain anything other than alphabet")
-    .trim(),
-  check("email")
-    .isEmail()
-    .withMessage("Invalid email address")
-    .trim()
-    .custom(async (value) => {
-      try {
-        const user = await User.findOne({ email: value });
-        if (user) {
-          throw createError("Email already is used!");
-        }
-      } catch (err) {
-        throw createError(err.message);
-      }
-    }),
-  check("phoneNumber")
-    .optional({ checkFalsy: true })
-    /* .isMobilePhone("bn-BD", {
-      strictMode: true, //  must be country code ex: +880...
-    })
-    .withMessage("Mobile number must be a valid") */
-    .custom(async (value) => {
-      try {
-        const user = await User.findOne({ phoneNumber: value });
-        if (user) {
-          throw createError("Mobile already is use!");
-        }
-      } catch (err) {
-        throw createError(err.message);
-      }
-    }),
-  check("password")
-    .isStrongPassword()
-    .withMessage(
-      "Password must be at least 8 characters long & should contain at least 1 lowercase, 1 uppercase, 1 number & 1 symbol"
-    ),
-];
+const User = require("../../models/User");
 
 const addUserValidationHandler = function (req, res, next) {
   const errors = validationResult(req);
@@ -74,6 +29,5 @@ const addUserValidationHandler = function (req, res, next) {
 };
 
 module.exports = {
-  addUserValidators,
   addUserValidationHandler,
 };

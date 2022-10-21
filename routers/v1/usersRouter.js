@@ -11,21 +11,14 @@ const {
   updateUserName,
   updatePresentAddress,
   updatePermanentAddress,
-  googleUser,
 } = require("../../Controller/usersController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 
-const {
-  addUserValidators,
-  addUserValidationHandler,
-} = require("../../middleWares/users/userValidators");
+const { addUserValidationHandler } = require("../../middleWares/users/userValidators");
 const router = express.Router();
 
 /*---------- get user details------------*/
 router.get("/my-profile-details/:email", verifyJWT, myProfileDetails);
-
-/*---------- google user------------*/
-router.put("/google", googleUser);
 
 /*------------- update image --------------*/
 router.put("/update/photoURL/:email", verifyJWT, updateImage);
@@ -51,11 +44,8 @@ router.get("/admin/:email", verifyJWT, requireRole(["admin"]), getAllAdmins);
 // make Role
 router.post("/makeRole/:id", verifyJWT, requireRole(["admin"]), makeRole);
 
-// add user  with image upload
-/* router.post("/", avatarUpload, addUserValidators, addUserValidationHandler, addUser); */
-
 // add user  without image upload
-router.post("/", addUserValidators, addUserValidationHandler, addUser);
+router.post("/", addUserValidationHandler, addUser);
 
 // remove user
 router.delete("/:id", verifyJWT, requireRole(["admin"]), removeUser);

@@ -4,7 +4,7 @@ const Product = require("../models/productSchema");
 /*----------- add product -------------*/
 const addProduct = async (req, res, next) => {
   if (req.user.role !== "admin") {
-    return next(createError(403, "Forbidden access!"));
+    return next(createError(403, "Forbidden Access!!"));
   }
   try {
     // console.log(req.body);

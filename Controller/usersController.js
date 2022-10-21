@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 
 // internal imports
-const User = require("../models/newUser");
+const User = require("../models/User");
 
 // get users page
 const getUsers = async (req, res, next) => {
@@ -34,7 +34,7 @@ const getAllAdmins = async (req, res, next) => {
 // add user
 const addUser = async (req, res, next) => {
   let newUser;
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  // const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const loginDevices = parser(req.headers["user-agent"]);
   if (req.files && req?.files.length > 0) {
     newUser = new User({
@@ -45,11 +45,11 @@ const addUser = async (req, res, next) => {
       password: hashedPassword,
     });
   } else {
+    console.log("req.body", req.body);
     newUser = new User({
       ...req.body,
       IPAddress: req.ip,
       loginDevices: loginDevices,
-      password: hashedPassword,
     });
   }
 
@@ -57,7 +57,7 @@ const addUser = async (req, res, next) => {
   try {
     const userObject = {
       displayName: req.body.displayName,
-      phoneNumber: req.body.phoneNumber,
+      phoneNumber: req.body?.phoneNumber,
       email: req.body.email,
       role: "user",
     };
@@ -73,27 +73,17 @@ const addUser = async (req, res, next) => {
       signed: true,
     });
 
-    newUser.save((err) => {
-      if (err) {
-        res.status(500).send({
-          errors: {
-            common: {
-              msg: "There was a server side error!",
-            },
-          },
-        });
-      } else {
-        res.status(200).send({
-          token: token,
-          message: "User was added successfully!",
-        });
-      }
+    await newUser.save();
+    res.status(200).send({
+      token: token,
+      message: "User was added successfully!",
     });
   } catch (err) {
+    console.log(err.message);
     res.status(500).send({
       errors: {
         common: {
-          msg: "Unknown error occurred!",
+          msg: err?.message,
         },
       },
     });
@@ -182,7 +172,7 @@ const updateImage = async (req, res, next) => {
 const updateNumber = async (req, res, next) => {
   try {
     const email = req.params.email;
-    const phoneNumber = req.body.phoneNumber;
+    const phoneNumber = req.body?.phoneNumber;
     const filter = { email: email };
     const options = { upsert: true };
     const updateDoc = {
@@ -191,7 +181,7 @@ const updateNumber = async (req, res, next) => {
     await User.findOneAndUpdate(filter, updateDoc, options);
     res.send({ update: true });
   } catch (error) {
-    next(createError(500, "There was a server error!"));
+    next(createError(500, error?.message));
   }
 };
 
@@ -250,126 +240,9 @@ const updatePermanentAddress = async (req, res, next) => {
   }
 };
 
-/*--------------  google user ----------------*/
-const googleUser = async (req, res, next) => {
-  try {
-    const loginDevices = parser(req.headers["user-agent"]);
-    const user = await User.findOne({ email: req.body.username });
-
-    if (user && user._id) {
-      const userObject = {
-        userId: user._id,
-        username: user.displayName,
-        phoneNumber: user.phoneNumber || null,
-        email: user.email,
-        role: user.role || "user",
-      };
-
-      // generate token
-      const token = jwt.sign(userObject, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRY,
-      });
-
-      //  Update IP address when login with different devices
-      const options = { upsert: true };
-      const filter = { email: user.email };
-      const existIp = user.IPAddress.find((ip) => ip === req.ip);
-      if (!existIp) {
-        const addNewIpAddress = [...user.IPAddress, req.ip];
-        const updateDoc = {
-          $set: {
-            IPAddress: addNewIpAddress,
-          },
-        };
-        await User.findOneAndUpdate(filter, updateDoc, options);
-      }
-
-      // Update Devices when login with different devices
-      const existDevice = user.loginDevices.find((devices) => devices.ua === loginDevices.ua);
-      if (!existDevice) {
-        const addNewLoginDevices = [...user.loginDevices, loginDevices];
-        const updateDoc = {
-          $set: {
-            loginDevices: addNewLoginDevices,
-          },
-        };
-        //update
-        await User.findOneAndUpdate(filter, updateDoc, options);
-      }
-
-      //set cookie
-      res.cookie(process.env.COOKIE_NAME, token, {
-        maxAge: process.env.JWT_EXPIRY,
-        httpOnly: true,
-        signed: true,
-      });
-
-      res.status(200).send({ token: token, message: "success" });
-      // set logged in user local identifier
-      res.locals.loggedInUser = userObject;
-    } else {
-      const userObject = {
-        providerId: req.body.providerId,
-        email: req.body.username,
-        username: req.body.displayName,
-        phoneNumber: user.phoneNumber || null,
-        role: user.role || "user",
-      };
-
-      const token = jwt.sign(userObject, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRY,
-      });
-
-      res.cookie(process.env.COOKIE_NAME, token, {
-        maxAge: process.env.JWT_EXPIRY,
-        httpOnly: true,
-        signed: true,
-      });
-
-      let googleUser = new User({
-        IPAddress: req.ip,
-        loginDevices: loginDevices,
-        displayName: req.body.displayName,
-        providerId: req.body.providerId,
-        email: req.body.username,
-        photoURL: req.body.photoURL,
-      });
-
-      googleUser.save((err) => {
-        if (err) {
-          res.status(500).send({
-            errors: {
-              common: {
-                token: token,
-                msg: "There was a server side error!",
-              },
-            },
-          });
-        } else {
-          console.log("done");
-          res.status(200).send({
-            token: token,
-            message: "User was added successfully!",
-          });
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      errors: {
-        common: {
-          msg: "There was a server side error!",
-        },
-      },
-    });
-  }
-};
-
 module.exports = {
   getUsers,
   addUser,
-  googleUser,
   removeUser,
   getAllAdmins,
   makeRole,
