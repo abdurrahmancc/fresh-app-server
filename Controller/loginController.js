@@ -89,7 +89,7 @@ const loginController = async (req, res, next) => {
   }
 };
 
-/*--------------  google user ----------------*/
+/*-------------- google user ----------------*/
 const googleUser = async (req, res, next) => {
   try {
     const loginDevices = parser(req.headers["user-agent"]);
