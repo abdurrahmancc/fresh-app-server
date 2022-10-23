@@ -9,7 +9,7 @@ const {
 } = require("../../Controller/blogsController");
 const { verifyJWT, requireRole } = require("../../middleWares/common/checkLogin");
 
-router.post("/", verifyJWT, requireRole(["admin", "moderator"]), addBlog);
+router.post("/", verifyJWT, requireRole(["admin"]), addBlog);
 
 /*----------- get Blogs Length -----------*/
 router.get("/counter", getBlogsLength);

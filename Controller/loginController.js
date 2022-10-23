@@ -228,7 +228,12 @@ const getToken = async (req, res) => {
 // is Admin
 const isAdmin = async (req, res) => {
   if (req.user.role) {
-    const isAdmin = req.user.role === ("admin" || "moderator");
+    let isAdmin;
+    if (req.user.role === "admin" || req.user.role === "moderator") {
+      isAdmin = true;
+    } else {
+      isAdmin = false;
+    }
     res.send({ admin: isAdmin });
   } else {
     res.send({ admin: false });

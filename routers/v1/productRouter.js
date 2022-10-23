@@ -30,7 +30,7 @@ router.post("/wishlist-products", getWishlistProducts);
 router.post("/compare-List/products", getCompareListProducts);
 
 /*---------- add product -----------*/
-router.post("/add-product", verifyJWT, requireRole(["admin", "moderator"]), addProduct);
+router.post("/add-product", verifyJWT, requireRole(["admin"]), addProduct);
 
 /*---------- search products -----------*/
 router.post("/search", searchProduct);
