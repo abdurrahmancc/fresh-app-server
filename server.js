@@ -49,7 +49,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/*---------- parser cookies --------------*/
+/*---------- parser cookies  --------------*/
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 /*--------- router setup --------------*/
