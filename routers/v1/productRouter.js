@@ -8,7 +8,6 @@ const {
   getProductDetails,
   getWishlistProducts,
   getCompareListProducts,
-  getHomeProducts,
   searchProduct,
   getProducts,
 } = require("../../Controller/productController");
