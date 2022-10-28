@@ -74,7 +74,7 @@ app.listen(port, () => {
 /*--------- If no error is handled express -----------*/
 process.on("unhandledRejection", (error) => {
   console.log(error.name, error.message);
-  // app.close(() => {
-  //   process.exit(1);
-  // });
+  app.close(() => {
+    process.exit(1);
+  });
 });
